@@ -9,12 +9,26 @@ class Helper
 
     public void Start()
     {
-        
+
         Console.WriteLine("\nMatematik oyununa hoş geldiniz, lütfen isminizi giriniz:");
         name = Console.ReadLine();
         Console.WriteLine("\nKurallar Şöyle: \n* Karşınıza gelen işlemin sonucunu sayfaya girmelisiniz, her hangi bir zaman limii yok \n* Beş tane hata yapma hakkınız var, Canlarınızı verilen işlemin altında bulunan ♥ sembollerinde görebilirsiniz \n* Oyunu oynarken her an 'Exit' Yazarak oyundan çıkabilirsiniz.\n*Oyun ilerledikçe zorlaşmaya başlıyacak, belli seviyeleri geçince uyarılacaksınız\nEğer kesirli bir cevap vermeniz gerekiyorsa sadece virgülden sonraki ilk sayıyı girin(örn: 2/3 = 0,6). Eğer nokta (.) kullanırsanız cevabınız yanlış kabul edilecektir\n\nDevam etmek için her hangi bir tuşa basın");
         Console.ReadKey();
         Display();
+    }
+
+    public void End()
+    {
+        var readakey = Console.ReadKey();
+        if (readakey.Key == ConsoleKey.Q)
+        {
+            Console.WriteLine("Oynadığınız için teşekkürler");
+            return;
+        }
+        else
+        {
+            Display();
+        }
     }
     public void Display()
     {
@@ -37,12 +51,12 @@ class Helper
             }
 
             int[] currqst = game.GenerateQuestion(score);
-            double answerCorrect = game.GenerateAnswer(currqst[0], currqst[1], currqst[2]);
+            double answerCorrect = Game.GenerateAnswer(currqst[0], currqst[1], currqst[2]);
 
-            Console.WriteLine($"\n{game.GenerateDisplay(currqst[0], currqst[1], currqst[2])}\n" +
+            Console.WriteLine($"\n{Game.GenerateDisplay(currqst[0], currqst[1], currqst[2])}\n" +
                 $"\nŞu anki Skorunuz: {score}               Can: {livesHud} \n");
             string answer = Console.ReadLine();
-            int InputState = game.CheckAnswer(answer, answerCorrect);
+            int InputState = Game.CheckAnswer(answer, answerCorrect);
             switch (InputState)
             {
                 case 0:
@@ -72,16 +86,7 @@ class Helper
         {
             Console.WriteLine($"\n\n{name}, Skorunuz: {score}       En yüksek Skorunuz {topScore}\n\n" +
                 $"Tekrar oynamak için her hangi bir tuşa tıklayın, çıkmak için Q tuşuna tıklayın.");
-            var readakey = Console.ReadKey();
-            if (readakey.Key == ConsoleKey.Q)
-            {
-                Console.WriteLine("\n\nOynadığınız için teşekkürler");
-                return;
-            }
-            else
-            {
-                Display();
-            }
+            End();
         }
         else
         {
@@ -89,16 +94,7 @@ class Helper
                 $"Yeni En Yüksek Skorunuz: {score}       Eski En yüksek skorunuz: {topScore}\n\n" +
                 $"Tekrar oynamak için her hangi bir tuşa tıklayın, çıkmak için Q tuşuna tıklayın");
             topScore = score;
-            var readakey = Console.ReadKey();
-            if (readakey.Key == ConsoleKey.Q)
-            {
-                Console.WriteLine("Oynadığınız için teşekkürler");
-                return;
-            }
-            else
-            {
-                Display();
-            }
+            End();
             {
 
         }
@@ -109,11 +105,7 @@ class Helper
 
 public class Game
     {
-        //, answer;
-        public int score, lives;
     readonly Random rnd = new();
-        public bool level2, level3;
-        public string? livesHud;
         public int[] GenerateQuestion(int score)
         {
             int[] Qst = new int[4];
@@ -140,43 +132,31 @@ public class Game
             }
             return Qst;
         }
-        public double GenerateAnswer(int num1, int num2, int oper)
+        public static double GenerateAnswer(int num1, int num2, int oper)
         {
         double a = num1;
         double b = num2;
-            switch (oper)
-            {
-                case 1:
-                    return num1 - num2;
-                case 2:
-                    return num1 * num2;
-                case 3:
-                return Math.Floor(a / b * 10)/10;
-                case 4:
-                    return num1 % num2;
-                default:
-                    return num1 + num2;
-            }
-
-        }
-        public string GenerateDisplay(int num1, int num2, int oper)
+        return oper switch
         {
-            switch (oper)
-            {
-                case 1:
-                    return $"\n{num1} - {num2} = ";
-                case 2:
-                    return $"\n{num1} X {num2} = ";
-                case 3:
-                    return $"\n{num1} / {num2} = ";
-                case 4:
-                    return $"\n{num1} % {num2} = ";
-                default:
-                    return $"\n{num1} + {num2} = ";
-            }
-
-        }
-        public int   CheckAnswer(string answer, double correctAnswer)
+            1 => num1 - num2,
+            2 => num1 * num2,
+            3 => Math.Floor(a / b * 10) / 10,
+            4 => num1 % num2,
+            _ => num1 + num2,
+        };
+    }
+        public static string GenerateDisplay(int num1, int num2, int oper)
+        {
+        return oper switch
+        {
+            1 => $"\n{num1} - {num2} = ",
+            2 => $"\n{num1} X {num2} = ",
+            3 => $"\n{num1} / {num2} = ",
+            4 => $"\n{num1} % {num2} = ",
+            _ => $"\n{num1} + {num2} = ",
+        };
+    }
+        public static int   CheckAnswer(string answer, double correctAnswer)
         {
             answer = answer.Replace('.', ',');
 ;            if (double.TryParse(answer, out double answerduo))
