@@ -97,43 +97,43 @@ class Helper
             End();
             {
 
-        }
+            }
         }
     }
 }
 
 
 public class Game
-    {
+{
     readonly Random rnd = new();
-        public int[] GenerateQuestion(int score)
+    public int[] GenerateQuestion(int score)
+    {
+        int[] Qst = new int[4];
+        if (score < 30)
         {
-            int[] Qst = new int[4];
-            if (score < 30)
-            {
-                Qst[0] = rnd.Next(1, 100);
-                Qst[1] = rnd.Next(1, 100);
-                Qst[2] = rnd.Next(2);
-                Qst[3] = 5;
-            }
-            else if (score >= 30 && score < 80)
-            {
-                Qst[0] = rnd.Next(1, 1000);
-                Qst[1] = rnd.Next(1, 1000);
-                Qst[2] = rnd.Next(4);
-                Qst[3] = 10;
-            }
-            else //score >= 80
-            {
-                Qst[0] = rnd.Next(1, 10000);
-                Qst[1] = rnd.Next(1, 100000);
-                Qst[2] = rnd.Next(5);
-                Qst[3] = 20;
-            }
-            return Qst;
+            Qst[0] = rnd.Next(1, 100);
+            Qst[1] = rnd.Next(1, 100);
+            Qst[2] = rnd.Next(2);
+            Qst[3] = 5;
         }
-        public static double GenerateAnswer(int num1, int num2, int oper)
+        else if (score >= 30 && score < 80)
         {
+            Qst[0] = rnd.Next(1, 1000);
+            Qst[1] = rnd.Next(1, 1000);
+            Qst[2] = rnd.Next(4);
+            Qst[3] = 10;
+        }
+        else //score >= 80
+        {
+            Qst[0] = rnd.Next(1, 10000);
+            Qst[1] = rnd.Next(1, 100000);
+            Qst[2] = rnd.Next(5);
+            Qst[3] = 20;
+        }
+        return Qst;
+    }
+    public static double GenerateAnswer(int num1, int num2, int oper)
+    {
         double a = num1;
         double b = num2;
         return oper switch
@@ -145,8 +145,8 @@ public class Game
             _ => num1 + num2,
         };
     }
-        public static string GenerateDisplay(int num1, int num2, int oper)
-        {
+    public static string GenerateDisplay(int num1, int num2, int oper)
+    {
         return oper switch
         {
             1 => $"\n{num1} - {num2} = ",
@@ -156,30 +156,30 @@ public class Game
             _ => $"\n{num1} + {num2} = ",
         };
     }
-        public static int   CheckAnswer(string answer, double correctAnswer)
+    public static int CheckAnswer(string answer, double correctAnswer)
+    {
+        answer = answer.Replace('.', ',');
+        ; if (double.TryParse(answer, out double answerduo))
         {
-            answer = answer.Replace('.', ',');
-;            if (double.TryParse(answer, out double answerduo))
+            if (Math.Equals(answerduo, correctAnswer))
             {
-                if (Math.Equals(answerduo, correctAnswer))
-                {
-                    return 0;
-                }
-                else
-                {
-                    return 1;
-                }
-
-            }
-            else if ((answer.IndexOf("Exit", StringComparison.OrdinalIgnoreCase) != -1) && (answer.Length == 4))
-            {
-                return 2;
+                return 0;
             }
             else
             {
-                return 3;
+                return 1;
             }
 
         }
+        else if ((answer.IndexOf("Exit", StringComparison.OrdinalIgnoreCase) != -1) && (answer.Length == 4))
+        {
+            return 2;
+        }
+        else
+        {
+            return 3;
+        }
+
     }
+}
 
