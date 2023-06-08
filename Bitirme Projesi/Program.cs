@@ -1,28 +1,28 @@
 ﻿
-Helper helper = new Helper();
-Game game = new Game();
+Helper helper = new();
 helper.Start();
 
 class Helper
 {
-
+    string? name;
+    int topScore = 0;
 
     public void Start()
     {
+        
         Console.WriteLine("\nMatematik oyununa hoş geldiniz, lütfen isminizi giriniz:");
-        string? name = Console.ReadLine();
+        name = Console.ReadLine();
         Console.WriteLine("\nKurallar Şöyle: \n* Karşınıza gelen işlemin sonucunu sayfaya girmelisiniz, her hangi bir zaman limii yok \n* Beş tane hata yapma hakkınız var, Canlarınızı verilen işlemin altında bulunan ♥ sembollerinde görebilirsiniz \n* Oyunu oynarken her an 'Exit' Yazarak oyundan çıkabilirsiniz.\n*Oyun ilerledikçe zorlaşmaya başlıyacak, belli seviyeleri geçince uyarılacaksınız\nEğer kesirli bir cevap vermeniz gerekiyorsa sadece virgülden sonraki ilk sayıyı girin(örn: 2/3 = 0,6). Eğer nokta (.) kullanırsanız cevabınız yanlış kabul edilecektir\n\nDevam etmek için her hangi bir tuşa basın");
         Console.ReadKey();
         Display();
     }
     public void Display()
     {
-        Game game = new Game();
+        Game game = new();
         int score = 0;
         int level = 0;
         int lives = 5;
         string livesHud = "♥♥♥♥♥";
-        int InputState = 0;
         while (lives > 0)
         {
             if ((score == 30) && (level == 0))
@@ -42,12 +42,12 @@ class Helper
             Console.WriteLine($"\n{game.GenerateDisplay(currqst[0], currqst[1], currqst[2])}\n" +
                 $"\nŞu anki Skorunuz: {score}               Can: {livesHud} \n");
             string answer = Console.ReadLine();
-            InputState = game.CheckAnswer(answer, answerCorrect);
+            int InputState = game.CheckAnswer(answer, answerCorrect);
             switch (InputState)
             {
                 case 0:
                     Console.WriteLine($"\n\nDoğru Cevap Verdiniz!\n+{currqst[3]} Puan!");
-                    score = score + currqst[3];
+                    score += currqst[3];
                     break;
                 case 1:
                     Console.WriteLine($"\n\nYanlış cevap veridiniz, Doğru cevap: {answerCorrect}");
@@ -60,13 +60,48 @@ class Helper
                     break;
                 default:
                     Console.WriteLine("Yanlış birşey girdiniz... Yeni soru soruluyor");
+                    //  score += 30;
+                    //only uncomment above for testing
                     break;
 
 
             }
+
+        }
+        if (score <= topScore)
+        {
+            Console.WriteLine($"\n\n{name}, Skorunuz: {score}       En yüksek Skorunuz {topScore}\n\n" +
+                $"Tekrar oynamak için her hangi bir tuşa tıklayın, çıkmak için Q tuşuna tıklayın.");
+            var readakey = Console.ReadKey();
+            if (readakey.Key == ConsoleKey.Q)
+            {
+                Console.WriteLine("\n\nOynadığınız için teşekkürler");
+                return;
+            }
+            else
+            {
+                Display();
+            }
+        }
+        else
+        {
+            Console.WriteLine($"\n\n{name}, Eski En Yüksek Skorunuzu Aştınız!\n\n" +
+                $"Yeni En Yüksek Skorunuz: {score}       Eski En yüksek skorunuz: {topScore}\n\n" +
+                $"Tekrar oynamak için her hangi bir tuşa tıklayın, çıkmak için Q tuşuna tıklayın");
+            topScore = score;
+            var readakey = Console.ReadKey();
+            if (readakey.Key == ConsoleKey.Q)
+            {
+                Console.WriteLine("Oynadığınız için teşekkürler");
+                return;
+            }
+            else
+            {
+                Display();
+            }
             {
 
-            }
+        }
         }
     }
 }
@@ -76,8 +111,7 @@ public class Game
     {
         //, answer;
         public int score, lives;
-        Random rnd = new Random();
-        Helper helper = new Helper();
+    readonly Random rnd = new();
         public bool level2, level3;
         public string? livesHud;
         public int[] GenerateQuestion(int score)
@@ -142,7 +176,7 @@ public class Game
             }
 
         }
-        public int CheckAnswer(string answer, double correctAnswer)
+        public int   CheckAnswer(string answer, double correctAnswer)
         {
             answer = answer.Replace('.', ',');
 ;            if (double.TryParse(answer, out double answerduo))
