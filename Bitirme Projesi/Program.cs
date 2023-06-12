@@ -46,7 +46,7 @@ class UI
                 Console.WriteLine("Sonraki seviyeye Geçtiniz!");
                 level++;
             }
-            else if((score == 80) && (level == 1));
+            else if((score == 80) && (level == 1))
             {
                 Console.WriteLine("Son Seviyeye Geldiniz!");
                 level++;
