@@ -1,8 +1,9 @@
 ﻿
-Helper helper = new();
-helper.Start();
 
-class Helper
+UI ui = new();
+ui.Start();
+
+class UI
 {
     string? name;
     int topScore = 0;
@@ -14,7 +15,7 @@ class Helper
         name = Console.ReadLine();
         Console.WriteLine("\nKurallar Şöyle: \n* Karşınıza gelen işlemin sonucunu sayfaya girmelisiniz, her hangi bir zaman limii yok \n* Beş tane hata yapma hakkınız var, Canlarınızı verilen işlemin altında bulunan ♥ sembollerinde görebilirsiniz \n* Oyunu oynarken her an 'Exit' Yazarak oyundan çıkabilirsiniz.\n*Oyun ilerledikçe zorlaşmaya başlıyacak, belli seviyeleri geçince uyarılacaksınız\nEğer kesirli bir cevap vermeniz gerekiyorsa sadece virgülden sonraki ilk sayıyı girin(örn: 2/3 = 0,6). Eğer nokta (.) kullanırsanız cevabınız yanlış kabul edilecektir\n\nDevam etmek için her hangi bir tuşa basın");
         Console.ReadKey();
-        Display();
+        GameinProgress();
     }
 
     public void End()
@@ -27,10 +28,10 @@ class Helper
         }
         else
         {
-            Display();
+            GameinProgress();
         }
     }
-    public void Display()
+    public void GameinProgress()
     {
         Game game = new();
         int score = 0;
@@ -74,7 +75,7 @@ class Helper
                     break;
                 default:
                     Console.WriteLine("Yanlış birşey girdiniz... Yeni soru soruluyor");
-                    //  score += 30;
+                    score += 30;
                     //only uncomment above for testing
                     break;
 
@@ -82,25 +83,14 @@ class Helper
             }
 
         }
-        if (score <= topScore)
-        {
-            Console.WriteLine($"\n\n{name}, Skorunuz: {score}       En yüksek Skorunuz {topScore}\n\n" +
-                $"Tekrar oynamak için her hangi bir tuşa tıklayın, çıkmak için Q tuşuna tıklayın.");
+            Console.WriteLine(Game.EndString(score, topScore, name));
+            topScore = Game.UpdateTopScore(score, topScore);
             End();
-        }
-        else
-        {
-            Console.WriteLine($"\n\n{name}, Eski En Yüksek Skorunuzu Aştınız!\n\n" +
-                $"Yeni En Yüksek Skorunuz: {score}       Eski En yüksek skorunuz: {topScore}\n\n" +
-                $"Tekrar oynamak için her hangi bir tuşa tıklayın, çıkmak için Q tuşuna tıklayın");
-            topScore = score;
-            End();
-            {
 
-            }
-        }
-    }
+       }
 }
+    
+
 
 
 public class Game
@@ -181,5 +171,21 @@ public class Game
         }
 
     }
+
+    public static string EndString(int score, int topScore, string name)
+    {
+        if (score <= topScore)
+        {
+            return $"\n\n{name}, Skorunuz: {score}       En yüksek Skorunuz {topScore}\n\nTekrar oynamak için her hangi bir tuşa tıklayın, çıkmak için Q tuşuna tıklayın.";
+        } else
+        {
+            return $"\n\n{name}, Eski En Yüksek Skorunuzu Aştınız!\n\nYeni En Yüksek Skorunuz: {score}       Eski En yüksek skorunuz: {topScore}\n\nTekrar oynamak için her hangi bir tuşa tıklayın, çıkmak için Q tuşuna tıklayın";
+        }
+    }
+    public static int UpdateTopScore(int score, int topScore)
+    {
+        return Math.Max(topScore, score);
+    }
 }
 
+  
