@@ -46,7 +46,7 @@ class UI
                 Console.WriteLine("Sonraki seviyeye Geçtiniz!");
                 level++;
             }
-            if ((score == 80) && (level == 1))
+            else if((score == 80) && (level == 1));
             {
                 Console.WriteLine("Son Seviyeye Geldiniz!");
                 level++;
@@ -193,12 +193,11 @@ public class Game
         if (score <= topScore)
         {
             return $"\n\n{name}, Skorunuz: {score}       En yüksek Skorunuz {topScore}\n\nTekrar oynamak için her hangi bir tuşa tıklayın, çıkmak için Q tuşuna tıklayın.";
-        } else
+        }
+        else
         {
             return $"\n\n{name}, Eski En Yüksek Skorunuzu Aştınız!\n\nYeni En Yüksek Skorunuz: {score}       Eski En yüksek skorunuz: {topScore}\n\nTekrar oynamak için her hangi bir tuşa tıklayın, çıkmak için Q tuşuna tıklayın";
         }
     }
-
 }
 
-  
