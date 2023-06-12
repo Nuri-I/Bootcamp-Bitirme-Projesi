@@ -1,5 +1,7 @@
 ﻿
 
+using static System.Formats.Asn1.AsnWriter;
+
 UI ui = new();
 ui.Start();
 
@@ -33,7 +35,6 @@ class UI
     }
     public void GameinProgress()
     {
-        Game game = new();
         int score = 0;
         int level = 0;
         int lives = 5;
@@ -51,40 +52,20 @@ class UI
                 level++;
             }
 
-            int[] currqst = game.GenerateQuestion(score);
+            int[] currqst = Game.GenerateQuestion(score);
             double answerCorrect = Game.GenerateAnswer(currqst[0], currqst[1], currqst[2]);
 
-            Console.WriteLine($"\n{Game.GenerateDisplay(currqst[0], currqst[1], currqst[2])}\n" +
-                $"\nŞu anki Skorunuz: {score}               Can: {livesHud} \n");
+            Console.WriteLine(Game.GenerateDisplay(currqst[0], currqst[1], currqst[2], score, livesHud));
             string answer = Console.ReadLine();
-            int InputState = Game.CheckAnswer(answer, answerCorrect);
-            switch (InputState)
-            {
-                case 0:
-                    Console.WriteLine($"\n\nDoğru Cevap Verdiniz!\n+{currqst[3]} Puan!");
-                    score += currqst[3];
-                    break;
-                case 1:
-                    Console.WriteLine($"\n\nYanlış cevap veridiniz, Doğru cevap: {answerCorrect}");
-                    lives--;
-                    livesHud = livesHud.Remove(lives);
-                    break;
-                case 2:
-                    Console.WriteLine("\n\nOyun durduruluyor, puanınız hesaplanacak...");
-                    lives = 0;
-                    break;
-                default:
-                    Console.WriteLine("Yanlış birşey girdiniz... Yeni soru soruluyor");
-                    score += 30;
-                    //only uncomment above for testing
-                    break;
-
-
-            }
+            int inputState = Game.CheckAnswer(answer, answerCorrect);
+            Console.WriteLine(Game.ResultString(inputState, currqst[3], answerCorrect));
+            lives = Game.ResultHealth(inputState, lives);
+            livesHud = Game.ResultHealthHud(inputState, lives, livesHud);
+            score += Game.ResultScore(inputState, currqst[3]);
 
         }
             Console.WriteLine(Game.EndString(score, topScore, name));
-            topScore = Game.UpdateTopScore(score, topScore);
+            topScore = Math.Max(score, topScore);
             End();
 
        }
@@ -95,9 +76,10 @@ class UI
 
 public class Game
 {
-    readonly Random rnd = new();
-    public int[] GenerateQuestion(int score)
+    public static int[] GenerateQuestion(int score)
     {
+        Random rnd = new();
+
         int[] Qst = new int[4];
         if (score < 30)
         {
@@ -135,15 +117,15 @@ public class Game
             _ => num1 + num2,
         };
     }
-    public static string GenerateDisplay(int num1, int num2, int oper)
+    public static string GenerateDisplay(int num1, int num2, int oper, int score, string hud)
     {
         return oper switch
         {
-            1 => $"\n{num1} - {num2} = ",
-            2 => $"\n{num1} X {num2} = ",
-            3 => $"\n{num1} / {num2} = ",
-            4 => $"\n{num1} % {num2} = ",
-            _ => $"\n{num1} + {num2} = ",
+            1 => $"\n\n{num1} - {num2} = \n\nŞu anki Skorunuz: {score}               Can: {hud} \n",
+            2 => $"\n\n{num1} X {num2} = \n\nŞu anki Skorunuz: {score}               Can: {hud} \n",
+            3 => $"\n\n{num1} / {num2} = \n\nŞu anki Skorunuz: {score}               Can: {hud} \n",
+            4 => $"\n\n{num1} % {num2} = \n\nŞu anki Skorunuz: {score}               Can: {hud} \n",
+            _ => $"\n\n{num1} + {num2} = \n\nŞu anki Skorunuz: {score}               Can: {hud} \n",
         };
     }
     public static int CheckAnswer(string answer, double correctAnswer)
@@ -171,7 +153,41 @@ public class Game
         }
 
     }
-
+    public static string ResultString(int state, int addScore, double correctAnswer)
+    {
+        return state switch
+        {
+            0 => $"\n\nDoğru Cevap Verdiniz!\n+{addScore} Puan!",
+            1 => $"\n\nYanlış cevap veridiniz, Doğru cevap: {correctAnswer}",
+            2 => "\n\nOyun durduruluyor, puanınız hesaplanacak...",
+            _ => "Yanlış birşey girdiniz... Yeni soru soruluyor",
+        };
+    }
+    public static int ResultHealth(int state, int lives)
+    {
+        return state switch
+        {
+            1 => lives - 1,
+            2 => 0,
+            _ => lives,
+        };
+    }
+    public static int ResultScore(int state, int addScore)
+    {
+        return state switch
+        {
+            0 => addScore,
+            _ => 0,
+        };
+    }
+    public static string ResultHealthHud(int state, int lives, string liveshud)
+    {
+        return state switch
+        {
+            1 => liveshud.Remove(lives),
+            _ => liveshud,
+        };
+    }
     public static string EndString(int score, int topScore, string name)
     {
         if (score <= topScore)
@@ -182,10 +198,7 @@ public class Game
             return $"\n\n{name}, Eski En Yüksek Skorunuzu Aştınız!\n\nYeni En Yüksek Skorunuz: {score}       Eski En yüksek skorunuz: {topScore}\n\nTekrar oynamak için her hangi bir tuşa tıklayın, çıkmak için Q tuşuna tıklayın";
         }
     }
-    public static int UpdateTopScore(int score, int topScore)
-    {
-        return Math.Max(topScore, score);
-    }
+
 }
 
   
