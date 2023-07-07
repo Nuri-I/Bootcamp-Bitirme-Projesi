@@ -6,26 +6,39 @@ Bootcamp tarafından bitirme uygulaması için bize verilen şartlar aşağıdak
 Pratik Matematik Uygulaması
 
 Matematiksel işlemlerle pratik yapmayı sağlayan bir uygulama geliştireceksiniz. Kullanıcılar karşılarına
+
 gelen işlemlerin cevaplarını girecekler. Verdikleri cevap doğru olduğunda puan kazanacaklar. Puanları
+
 arttıkça seviyeleri ilerleyecek ve karşılarına çıkan işlemler seviyelere göre değişecek.
+
 • Uygulama kullanıcıdan ilk önce kullanıcı adını isteyecektir.
+
 • Uygulamada geçerli matematik işlemleri toplama, çıkarma, çarpma, bölme ve mod almadır.
+
 • Uygulamada iki sayı ve bunların tabi olacağı işlem kullanıcıya gösterilecek ve cevap girmesi
 beklenecektir.
+
 • İlk seviyede sadece toplama ve çıkarma işlemleri sorulacaktır. İşlemde yer alan sayılar en fazla iki
 basamaklı olmalıdır. Verdikleri her doğru cevap için 5 puan kazanacaklardır.
+
 • Kullanıcının puanı 30 olduğunda ikinci seviyeye geçecektir. İkinci seviyede toplama, çıkarma,
 çarpma ve bölme sorulacaktır. İşlemde yer alan sayılar en fazla üç basamaklı olmalıdır. Verdikleri
 her doğru cevap için 10 puan kazanacaklardır.
+
 • Kullanıcının puanı 80 olduğunda üçüncü seviyeye geçecektir. Üçüncü seviyede tüm işlemler
 sorulabilir. İşlemde yer alan sayılar en fazla 4 basamaklı olmalıdır. Verdikleri her doğru cevap için
 20 puan kazanacaklardır.
+
 • Seviye geçişlerinde kullanıcı bilgilendirilmelidir.
+
 • Kullanıcı herhangi bir anda “exit” dediğinde uygulama kapanmalıdır.
+
 • Kullanıcının 5 yanlış cevap verme hakkı vardır. Bu hakkını doldurduğunda uygulama kullanıcıyı
 bilgilendirip puanını göstermelidir. Ayrıca tekrar oynamak isteyip istemediğini sormalıdır.
+
 • Kullanıcı tekrar oynadıkça, her oyun bitişi sonunda o ana kadar aldığı en yüksek puan
 gösterilmelidir. Eğer son oyunda kazandığı puan en yüksekse rekor bilgisi kullanıcıya verilmelidir.
+
 
 The Ending Project of the bootcamp was given to us to code by these parameters
 
