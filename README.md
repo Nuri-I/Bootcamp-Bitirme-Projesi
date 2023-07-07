@@ -53,7 +53,7 @@ as their points increase their level will increase and  the operations will get 
 * in the first level users will only be asked to do Addition and Subtraction, the numbers will be at most two digit and each right answer will grant 5 points
 * When user reaches 30 points they will reach the third level. in the second level users will be asked to do Addition, Subtraction, Multiplication and Division  
 the numbers will be at most three digit and each right answer will grant 10 points
-* When user reaches 80 points they will reach the third level. in the third level only users will be asked to do any operations available in the application  
+* When user reaches 80 points they will reach the third level. in the third level users will be asked to do any operations available in the application  
 the numbers will be at most four digit and each right answer will grant 20 points
 *The user must be informed up on a level change
 *The user can type "exit" at any time to close the application
